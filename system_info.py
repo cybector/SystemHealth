@@ -1,4 +1,3 @@
-import shutil
 import socket
 import psutil
 import platform
