@@ -1,47 +1,60 @@
+"""
+This module provides functions for retrieving system information.
+"""
+import platform
 import socket
 import psutil
-import platform
-from datetime import datetime
+from disk_usage import get_disk_usage
 
 
-# Function to get disk usage statistics
-def get_disk_usage(path):
-    total, used, free = shutil.disk_usage(path)
-    return total, used, free
-
-
-# Function to get CPU usage
-def get_cpu_usage():
-    return psutil.cpu_percent(interval=1)
-
-
-# Function to get memory usage
-def get_memory_usage():
-    memory = psutil.virtual_memory()
-    return memory.percent
-
-
-# Function to get list of running processes
-def get_running_processes():
-    processes = [proc.info for proc in psutil.process_iter(["pid", "name"])]
-    return processes
-
-
-# Function to get network info like hostname and IP address
-def get_network_info():
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-    return hostname, ip_address
-
-
-# Function to get OS information
 def get_os_info():
-    os_info = platform.uname()
-    return os_info
+    """
+    Returns information about the operating system.
+    """
+    uname = platform.uname()
+    return (
+        uname.system,
+        uname.node,
+        uname.release,
+        uname.version,
+        uname.machine,
+        uname.processor,
+    )
 
 
-# Function to get system boot time
-def get_boot_time():
-    boot_time_timestamp = psutil.boot_time()
-    boot_time = datetime.fromtimestamp(boot_time_timestamp)
-    return boot_time
+def get_cpu_info():
+    """
+    Returns information about the CPU.
+    """
+    return (
+        psutil.cpu_count(logical=False),
+        psutil.cpu_count(logical=True),
+        psutil.cpu_percent(),
+        str(psutil.cpu_freq().max) + "Mhz",
+    )
+
+
+def get_memory_info():
+    """
+    Returns information about the memory.
+    """
+    svmem = psutil.virtual_memory()
+    return (
+        str(svmem.total / (1024.0**3)) + " GB",
+        str(svmem.available / (1024.0**3)) + " GB",
+        svmem.percent,
+    )
+
+
+def get_disk_info():
+    """
+    Returns information about the disk.
+    """
+    return get_disk_usage("/")
+
+
+def get_network_info():
+    """
+    Returns information about the network.
+    """
+    return socket.gethostname(), socket.gethostbyname(socket.gethostname())
