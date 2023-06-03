@@ -1,4 +1,5 @@
 from system_info import *
+from disk_usage import get_disk_usage
 
 
 # Main function to print system information
