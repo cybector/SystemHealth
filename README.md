@@ -1,6 +1,6 @@
 # Disk Usage Information
 
-This Python project prints disk usage and other system information for a specified drive on a Windows system.
+ prints disk usage and other system information for a specified drive on a Windows system.
 
 ## How to Run
 
